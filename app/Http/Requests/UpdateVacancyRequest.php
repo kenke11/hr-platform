@@ -2,19 +2,18 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\EmploymentType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreVacancyRequest extends FormRequest
+class UpdateVacancyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth()->check()
-            && auth()->user()->hasRoleInCompany('hr');
+        return $this->user()
+            && $this->user()->hasRoleInCompany('hr');
     }
 
     /**
@@ -25,14 +24,10 @@ class StoreVacancyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id' => ['required', 'integer', 'exists:companies,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'location' => ['nullable', 'string', 'max:255'],
-            'employment_type' => [
-                'required',
-                Rule::in(EmploymentType::values()),
-            ],
+            'employment_type' => ['required', 'in:full_time,part_time,contract'],
             'expiration_date' => [
                 'nullable',
                 'date',

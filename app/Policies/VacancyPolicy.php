@@ -43,7 +43,7 @@ class VacancyPolicy
     /**
      * HR only
      */
-    public function update(User $user, Vacancy $vacancy): bool
+    public function update(User $user): bool
     {
         return $user->hasRoleInCompany('hr');
     }

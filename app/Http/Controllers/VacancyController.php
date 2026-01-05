@@ -6,6 +6,7 @@ use App\Http\Requests\CompanyVacancyIndexRequest;
 use App\Http\Requests\CreateVacancyRequest;
 use App\Http\Requests\IndexVacancyRequest;
 use App\Http\Requests\StoreVacancyRequest;
+use App\Http\Requests\UpdateVacancyRequest;
 use App\Models\Company;
 use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -126,6 +127,36 @@ class VacancyController extends Controller
         return redirect()
             ->route('vacancies.company', $company->slug)
             ->with('success', 'Vacancy created successfully.');
+    }
+
+    /**
+     * Show edit form (HR only)
+     */
+    public function edit(Vacancy $vacancy)
+    {
+        return view('vacancies.edit', compact('vacancy'));
+    }
+
+    /**
+     * Update vacancy
+     */
+    public function update(UpdateVacancyRequest $request, Vacancy $vacancy)
+    {
+        $vacancy->update([
+            'title'            => $request->title,
+            'description'      => $request->description,
+            'location'         => $request->location,
+            'employment_type'  => $request->employment_type,
+            'expiration_date'  => $request->expiration_date,
+        ]);
+
+        if ($request->action === 'published') {
+            $vacancy->publish();
+        }
+
+        return redirect()
+            ->route('vacancies.index')
+            ->with('success', 'Vacancy updated successfully.');
     }
 
     public function destroy(Vacancy $vacancy)
