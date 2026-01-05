@@ -36,7 +36,7 @@ class AttendanceService
     public function checkOut(User $user): Attendance
     {
         $attendance = Attendance::where('user_id', $user->id)
-            ->where('date', now()->toDateString())
+            ->whereDate('date', now())
             ->first();
 
         if (! $attendance || ! $attendance->check_in_at) {

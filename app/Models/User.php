@@ -218,6 +218,16 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function isCompanyUser(): bool
+    {
+        return ! is_null($this->company_id);
+    }
+
+    public function isCompanyAdmin(): bool
+    {
+        return $this->hasRoleInCompany('company-admin');
+    }
+
     /* ==========================================================
      | Helpers & Scopes
      |========================================================== */

@@ -27,6 +27,10 @@
         </div>
 
         <nav class="px-4 py-4 space-y-2 flex-1">
+            <a href="{{ route('profile.index') }}" class="block">
+                Profile
+            </a>
+
             <a href="{{ route('dashboard') }}" class="block">
                 Dashboard
             </a>
@@ -34,6 +38,12 @@
             @if(auth()->user()->canAccessAllCompanies())
                 <a href="{{ route('companies.index') }}" class="block">
                     Companies
+                </a>
+            @endif
+
+            @if(auth()->user()->hasRoleInCompany('company-admin'))
+                <a href="{{ route('companies.view', auth()->user()->company->slug) }}" class="block">
+                    Company
                 </a>
             @endif
 

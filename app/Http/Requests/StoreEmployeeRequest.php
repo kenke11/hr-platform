@@ -14,6 +14,9 @@ class StoreEmployeeRequest extends FormRequest
      */
     public function authorize(Company $company): bool
     {
+        /** @var Company|null $company */
+        $company = $this->route('company');
+
         return $this->user()?->canCrudEmployee($company) ?? false;
     }
 

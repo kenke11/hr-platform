@@ -6,6 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VacancyController;
 use App\Models\Company;
 use App\Models\User;
@@ -37,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])
         ->name('logout');
 
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile.index');
 
     Route::get('/', [DashboardController::class, 'index'])
         ->name('dashboard');
@@ -55,7 +58,7 @@ Route::middleware('auth')->group(function () {
             ->name('companies.store');
     });
 
-    Route::middleware('can:view,' . Company::class)->group(function () {
+    Route::middleware('can:view,company')->group(function () {
         Route::get('/companies/{company:slug}', [CompanyController::class, 'view'])
             ->name('companies.view');
     });

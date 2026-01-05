@@ -25,6 +25,7 @@ class AttendanceController extends Controller
 
             return back()->with('success', 'Checked out successfully.');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->withErrors($e->getMessage());
         }
     }

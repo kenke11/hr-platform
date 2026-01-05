@@ -18,9 +18,9 @@ class CompanyPolicy
     /**
      * View single company
      */
-    public function view(User $user): bool
+    public function view(User $user, Company $company): bool
     {
-        return $user->canAccessAllCompanies();
+        return $user->canAccessAllCompanies() || ($user->isCompanyAdmin() && $user->company_id === $company->id);
     }
 
     /**

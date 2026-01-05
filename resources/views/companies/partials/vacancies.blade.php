@@ -12,7 +12,7 @@
             <th class="p-3 text-left">Status</th>
             <th class="p-3 text-left">Expiration</th>
             <th class="p-3 text-left">Created</th>
-            @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin'))
+            @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin') || auth()->user()->hasRoleInCompany('company-admin'))
                 <th class="p-3 text-left">Actions</th>
             @endif
         </tr>
@@ -58,7 +58,7 @@
                     {{ $vacancy->created_at->format('Y-m-d') }}
                 </td>
 
-                @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin'))
+                @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin') || auth()->user()->hasRoleInCompany('company-admin'))
                     <td class="p-3">
                         <div class="flex gap-2">
                             {{-- View --}}
@@ -79,23 +79,24 @@
                                 </a>
                             @endif
 
-                            {{-- Delete --}}
-                            <form
-                                method="POST"
-                                action="{{ route('vacancies.destroy', $vacancy) }}"
-                                onsubmit="return confirm('Delete this vacancy?')"
-                            >
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="text-red-600 hover:underline text-sm"
+                            @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin'))
+                                {{-- Delete --}}
+                                <form
+                                    method="POST"
+                                    action="{{ route('vacancies.destroy', $vacancy) }}"
+                                    onsubmit="return confirm('Delete this vacancy?')"
                                 >
-                                    Delete
-                                </button>
-                            </form>
+                                    @csrf
+                                    @method('DELETE')
 
+                                    <button
+                                        type="submit"
+                                        class="text-red-600 hover:underline text-sm"
+                                    >
+                                        Delete
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </td>
                 @endif
