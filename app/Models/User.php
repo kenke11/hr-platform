@@ -56,6 +56,27 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
+
+    /* =======================
+     | Hierarchy
+     |======================= */
+
+    // Manager
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    // Subordinates
+    public function subordinates()
+    {
+        return $this->hasMany(User::class, 'manager_id');
+    }
+
     /* ==========================================================
      | Role helpers (multi-tenant aware)
      |========================================================== */

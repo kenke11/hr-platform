@@ -26,6 +26,11 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
 
+    public function positions()
+    {
+        return $this->hasMany(Position::class);
+    }
+
     public function vacancies()
     {
         return $this->hasMany(Vacancy::class);
