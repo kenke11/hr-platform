@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\VacancyController;
+use App\Models\Vacancy;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -39,4 +41,32 @@ Route::middleware('auth')->group(function () {
         Route::get('/companies', [CompanyController::class, 'index'])
             ->name('companies.index');
     });
+
+    Route::get('/vacancies', [VacancyController::class, 'index'])
+        ->middleware('can:viewAny,' . Vacancy::class)
+        ->name('vacancies.index');
+
+    Route::get('/companies/{company:slug}/vacancies', [VacancyController::class, 'companyIndex'])
+        ->middleware('can:viewCompanyVacancies,' . Vacancy::class)
+        ->name('vacancies.company');
+
+    Route::middleware('can:create,' . Vacancy::class)->group(function () {
+        Route::get('/vacancies/create', [VacancyController::class, 'create'])
+            ->name('vacancies.create');
+
+        Route::post('/vacancies', [VacancyController::class, 'store'])
+            ->name('vacancies.store');
+    });
+
+    Route::middleware('can:update,' . Vacancy::class)->group(function () {
+        Route::get('/vacancies/{vacancy}/edit', [VacancyController::class, 'edit'])
+            ->name('vacancies.edit');
+
+        Route::put('/vacancies/{vacancy}', [VacancyController::class, 'update'])
+            ->name('vacancies.update');
+    });
+
+    Route::delete('/vacancies/{vacancy}', [VacancyController::class, 'destroy'])
+        ->middleware('can:delete,vacancy')
+        ->name('vacancies.destroy');
 });

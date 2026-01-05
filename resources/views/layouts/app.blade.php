@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'HR Dashboard')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -22,6 +23,13 @@
                     Companies
                 </a>
             @endif
+
+            @if(
+                auth()->user()->canAccessAllCompanies()
+            )
+                <a href="{{ route('vacancies.index') }}">Vacancies</a>
+            @endif
+
         </nav>
 
         {{-- Logout --}}
