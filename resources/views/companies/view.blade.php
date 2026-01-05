@@ -41,6 +41,18 @@
 
                 {{-- Employees --}}
                 <a
+                    href="{{ route('companies.view', $company) }}?tab=positions"
+                    @class([
+                        'pb-2 font-medium',
+                        'border-b-2 border-black' => $tab === 'positions',
+                        'text-gray-500' => $tab !== 'positions',
+                    ])
+                >
+                    Positions
+                </a>
+
+                {{-- Employees --}}
+                <a
                     href="{{ route('companies.view', $company) }}?tab=employees"
                     @class([
                         'pb-2 font-medium',
@@ -57,6 +69,10 @@
         {{-- Tab Content --}}
         @if($tab === 'vacancies')
             @include('companies.partials.vacancies')
+        @endif
+
+        @if($tab === 'positions')
+            @include('companies.partials.positions')
         @endif
 
         @if($tab === 'employees')

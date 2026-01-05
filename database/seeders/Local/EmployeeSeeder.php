@@ -12,10 +12,23 @@ class EmployeeSeeder extends Seeder
     public function run(): void
     {
         Company::all()->each(function (Company $company) {
+            $positionManager = Position::where('company_id', $company->id)
+                ->where('name', 'Manager')
+                ->firstOrFail();
 
             $manager = User::where('company_id', $company->id)
-                ->whereHas('position', fn ($q) => $q->where('name', 'Manager'))
+                ->where('position_id', $positionManager->id)
                 ->first();
+
+            if(!$manager) {
+
+                $manager = User::factory()->create([
+                    'company_id' => $company->id,
+                    'position_id' => $positionManager?->id,
+                ]);
+
+                $manager->assignRoleForCompany('employee');
+            }
 
             $position = Position::where('company_id', $company->id)
                 ->where('name', 'Employee')

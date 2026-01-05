@@ -3,8 +3,10 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\VacancyController;
 use App\Models\Company;
+use App\Models\User;
 use App\Models\Vacancy;
 use Illuminate\Support\Facades\Route;
 
@@ -99,4 +101,40 @@ Route::middleware('auth')->group(function () {
     Route::delete('/vacancies/{vacancy}', [VacancyController::class, 'destroy'])
         ->middleware('can:delete,vacancy')
         ->name('vacancies.destroy');
+
+    Route::get(
+        '/companies/{company:slug}/employees/create',
+        [EmployeeController::class, 'create']
+    )
+        ->name('employees.create');
+
+    Route::post(
+        '/companies/{company:slug}/employees',
+        [EmployeeController::class, 'store']
+    )
+        ->name('employees.store');
+
+    Route::get(
+        '/companies/{company:slug}/employees/{user}',
+        [EmployeeController::class, 'show']
+    )
+        ->name('employees.show');
+
+    Route::get(
+        '/companies/{company:slug}/employees/{user}/edit',
+        [EmployeeController::class, 'edit']
+    )
+        ->name('employees.edit');
+
+    Route::put(
+        '/companies/{company:slug}/employees/{user}',
+        [EmployeeController::class, 'update']
+    )
+        ->name('employees.update');
+
+    Route::delete(
+        '/companies/{company:slug}/employees/{user}',
+        [EmployeeController::class, 'destroy']
+    )
+        ->name('employees.destroy');
 });

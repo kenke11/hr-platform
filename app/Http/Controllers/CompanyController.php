@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
+use App\Models\Position;
 use App\Models\User;
 use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -93,8 +94,8 @@ class CompanyController extends Controller
         if ($tab === 'employees') {
             $employees = User::query()
                 ->where('company_id', $company->id)
-                ->select(['id', 'name', 'email', 'company_id'])
-                ->with(['roles:id,name'])
+                ->select(['id', 'name', 'email', 'company_id', 'position_id'])
+                ->with(['roles:id,name', 'position:id,name'])
                 ->latest()
                 ->paginate(10)
                 ->withQueryString();
@@ -103,6 +104,21 @@ class CompanyController extends Controller
                 'company' => $company,
                 'tab' => 'employees',
                 'employees' => $employees,
+            ]);
+        }
+
+        if ($tab === 'positions') {
+            $positions = Position::query()
+                ->where('company_id', $company->id)
+                ->select(['id', 'name', 'description', 'company_id'])
+                ->latest()
+                ->paginate(10)
+                ->withQueryString();
+
+            return view('companies.view', [
+                'company' => $company,
+                'tab' => 'positions',
+                'positions' => $positions,
             ]);
         }
 

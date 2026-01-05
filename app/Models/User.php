@@ -170,6 +170,22 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function canCrudEmployee(?Company $company = null): bool
+    {
+        // system-level
+        if (
+            $this->hasRoleInCompany('admin') ||
+            $this->hasRoleInCompany('hr')
+        ) {
+            return true;
+        }
+
+        // company-admin only inside own company
+        return $company
+            && $this->hasRoleInCompany('company-admin')
+            && $this->company_id === $company->id;
+    }
+
     /**
      * System-level access
      */
