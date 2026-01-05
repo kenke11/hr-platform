@@ -32,11 +32,6 @@
                 @if(auth()->user()->canCrudPositions($company))
                     <td class="p-3 flex gap-2">
                         <a class="text-blue-600 hover:underline text-sm"
-                           href="{{ route('positions.show', [$company, $position]) }}">
-                            View
-                        </a>
-
-                        <a class="text-blue-600 hover:underline text-sm"
                            href="{{ route('positions.edit', [$company, $position]) }}">
                             Edit
                         </a>

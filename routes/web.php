@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
@@ -153,12 +154,6 @@ Route::middleware('auth')->group(function () {
         ->name('positions.store');
 
     Route::get(
-        '/companies/{company:slug}/positions/{position}',
-        [PositionController::class, 'show']
-    )
-        ->name('positions.show');
-
-    Route::get(
         '/companies/{company:slug}/positions/{position}/edit',
         [PositionController::class, 'edit']
     )
@@ -175,4 +170,10 @@ Route::middleware('auth')->group(function () {
         [PositionController::class, 'destroy']
     )
         ->name('positions.destroy');
+
+    Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])
+        ->name('attendance.checkin');
+
+    Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])
+        ->name('attendance.checkout');
 });

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Local\AttendanceSeeder;
 use Database\Seeders\Local\CompanyAdminSeeder;
 use Database\Seeders\Local\CompanySeeder;
 use Database\Seeders\Local\EmployeeSeeder;
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
                 CompanyAdminSeeder::class,
                 EmployeeSeeder::class,
                 VacancySeeder::class,
+                AttendanceSeeder::class,
             ]);
         }
     }

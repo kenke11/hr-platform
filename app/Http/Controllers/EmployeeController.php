@@ -96,12 +96,29 @@ class EmployeeController extends Controller
         $authUser = auth()->user();
         abort_unless($authUser->canCrudEmployee($company), 403);
 
+        $employee = $user->load([
+            'position:id,name',
+            'manager:id,name',
+        ]);
+
+        $attendances = $user->attendances()
+            ->where('company_id', $company->id)
+            ->orderByDesc('date')
+            ->paginate(10)
+            ->withQueryString();
+
+        $subordinates = User::where('manager_id', $user->id)
+            ->where('company_id', $company->id)
+            ->with('position:id,name')
+            ->orderBy('name')
+            ->paginate(10, ['*'], 'subordinates_page')
+            ->withQueryString();
+
         return view('employees.show', [
-            'company'  => $company,
-            'employee' => $user->load([
-                'position:id,name',
-                'manager:id,name',
-            ]),
+            'company'      => $company,
+            'employee'     => $employee,
+            'attendances'  => $attendances,
+            'subordinates' => $subordinates,
         ]);
     }
 
