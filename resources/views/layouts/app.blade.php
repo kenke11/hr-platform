@@ -13,6 +13,19 @@
             HR Platform
         </div>
 
+        {{-- Logout --}}
+        <div class="p-4 border-t">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button
+                    type="submit"
+                    class="w-full text-left text-red-600 hover:text-red-800"
+                >
+                    Logout
+                </button>
+            </form>
+        </div>
+
         <nav class="px-4 py-4 space-y-2 flex-1">
             <a href="{{ route('dashboard') }}" class="block">
                 Dashboard
@@ -32,18 +45,6 @@
 
         </nav>
 
-        {{-- Logout --}}
-        <div class="p-4 border-t">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button
-                    type="submit"
-                    class="w-full text-left text-red-600 hover:text-red-800"
-                >
-                    Logout
-                </button>
-            </form>
-        </div>
     </aside>
 
     <main class="flex-1 p-6">

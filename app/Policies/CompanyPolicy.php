@@ -18,7 +18,7 @@ class CompanyPolicy
     /**
      * View single company
      */
-    public function view(User $user, Company $company): bool
+    public function view(User $user): bool
     {
         return $user->canAccessAllCompanies();
     }
@@ -34,7 +34,7 @@ class CompanyPolicy
     /**
      * Update company
      */
-    public function update(User $user, Company $company): bool
+    public function update(User $user): bool
     {
         return $user->canAccessAllCompanies();
     }
@@ -42,7 +42,7 @@ class CompanyPolicy
     /**
      * Delete company
      */
-    public function delete(User $user, Company $company): bool
+    public function delete(User $user): bool
     {
         return $user->canAccessAllCompanies();
     }

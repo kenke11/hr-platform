@@ -5,6 +5,13 @@
 @section('content')
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Companies</h1>
+
+        @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin'))
+            <a href="{{ route('companies.create') }}"
+               class="bg-black text-white px-4 py-2 rounded">
+                + Create Company
+            </a>
+        @endif
     </div>
 
     <div class="bg-white shadow rounded">
@@ -16,6 +23,7 @@
                 <th class="p-3 text-left">Slug</th>
                 <th class="p-3 text-left">Status</th>
                 <th class="p-3 text-left">Created</th>
+                <th class="p-3 text-left">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -33,6 +41,42 @@
                     </td>
                     <td class="p-3 text-sm text-gray-500">
                         {{ $company->created_at->format('Y-m-d') }}
+                    </td>
+                    <td class="p-3">
+                        <div class="flex gap-2">
+                            {{-- View --}}
+                            <a
+                                href="{{ route('companies.view', $company->slug) }}"
+                                class="text-blue-600 hover:underline text-sm"
+                            >
+                                View
+                            </a>
+
+                            {{-- Edit --}}
+                            <a
+                                href="{{ route('companies.edit', $company->slug) }}"
+                                class="text-blue-600 hover:underline text-sm"
+                            >
+                                Edit
+                            </a>
+
+                            {{-- Delete --}}
+                            <form
+                                method="POST"
+                                action="{{ route('companies.destroy', $company->slug) }}"
+                                onsubmit="return confirm('Delete this company?')"
+                            >
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    type="submit"
+                                    class="text-red-600 hover:underline text-sm"
+                                >
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @empty
