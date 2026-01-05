@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Local;
 
-use Illuminate\Database\Seeder;
 use App\Models\Company;
 use App\Models\Vacancy;
+use Illuminate\Database\Seeder;
 
 class VacancySeeder extends Seeder
 {

@@ -2,6 +2,12 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Local\CompanyAdminSeeder;
+use Database\Seeders\Local\CompanySeeder;
+use Database\Seeders\Local\EmployeeSeeder;
+use Database\Seeders\Local\PositionSeeder;
+use Database\Seeders\Local\SystemUserSeeder;
+use Database\Seeders\Local\VacancySeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,7 +20,11 @@ class DatabaseSeeder extends Seeder
 
         if (app()->environment('local')) {
             $this->call([
-                LocalDemoSeeder::class,
+                CompanySeeder::class,
+                PositionSeeder::class,
+                SystemUserSeeder::class,
+                CompanyAdminSeeder::class,
+                EmployeeSeeder::class,
                 VacancySeeder::class,
             ]);
         }
