@@ -1,4 +1,4 @@
-@if(auth()->user()->canCrudEmployee())
+@if(auth()->user()->canCrudEmployee($company))
     <a href="{{ route('employees.create', $company->slug) }}"
        class="bg-black text-white px-4 py-2 rounded mb-4">
         + Create Employee
@@ -31,7 +31,7 @@
                     {{ $employee->position->name ?? '-' }}
                 </td>
 
-                <td class="p-3">
+                <td class="p-3 flex gap-2">
                     <a class="text-blue-600 hover:underline text-sm"
                        href="{{ route('employees.show', [$company, $employee]) }}">
                         View

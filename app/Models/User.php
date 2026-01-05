@@ -186,6 +186,22 @@ class User extends Authenticatable
             && $this->company_id === $company->id;
     }
 
+    public function canCrudPositions(?Company $company = null)
+    {
+        // system-level
+        if (
+            $this->hasRoleInCompany('admin') ||
+            $this->hasRoleInCompany('hr')
+        ) {
+            return true;
+        }
+
+        // company-admin only inside own company
+        return $company
+            && $this->hasRoleInCompany('company-admin')
+            && $this->company_id === $company->id;
+    }
+
     /**
      * System-level access
      */

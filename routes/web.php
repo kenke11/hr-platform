@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\VacancyController;
 use App\Models\Company;
 use App\Models\User;
@@ -137,4 +138,41 @@ Route::middleware('auth')->group(function () {
         [EmployeeController::class, 'destroy']
     )
         ->name('employees.destroy');
+
+
+    Route::get(
+        '/companies/{company:slug}/positions/create',
+        [PositionController::class, 'create']
+    )
+        ->name('positions.create');
+
+    Route::post(
+        '/companies/{company:slug}/positions',
+        [PositionController::class, 'store']
+    )
+        ->name('positions.store');
+
+    Route::get(
+        '/companies/{company:slug}/positions/{position}',
+        [PositionController::class, 'show']
+    )
+        ->name('positions.show');
+
+    Route::get(
+        '/companies/{company:slug}/positions/{position}/edit',
+        [PositionController::class, 'edit']
+    )
+        ->name('positions.edit');
+
+    Route::put(
+        '/companies/{company:slug}/positions/{position}',
+        [PositionController::class, 'update']
+    )
+        ->name('positions.update');
+
+    Route::delete(
+        '/companies/{company:slug}/positions/{position}',
+        [PositionController::class, 'destroy']
+    )
+        ->name('positions.destroy');
 });
