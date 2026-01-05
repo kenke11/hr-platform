@@ -76,7 +76,7 @@
                 <th class="p-3 text-left">Status</th>
                 <th class="p-3 text-left">Expiration</th>
                 <th class="p-3 text-left">Created</th>
-                @if(auth()->user()->hasRoleInCompany('hr'))
+                @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin'))
                     <th class="p-3 text-left">Actions</th>
                 @endif
             </tr>
@@ -122,16 +122,26 @@
                         {{ $vacancy->created_at->format('Y-m-d') }}
                     </td>
 
-                    @if(auth()->user()->hasRoleInCompany('hr'))
+                    @if(auth()->user()->hasRoleInCompany('hr') || auth()->user()->hasRoleInCompany('admin'))
                         <td class="p-3">
                             <div class="flex gap-2">
-                                {{-- Edit --}}
+                                {{-- View --}}
                                 <a
-                                    href="{{ route('vacancies.edit', $vacancy) }}"
+                                    href="{{ route('vacancies.view', $vacancy) }}"
                                     class="text-blue-600 hover:underline text-sm"
                                 >
-                                    Edit
+                                    View
                                 </a>
+
+                                @if(auth()->user()->hasRoleInCompany('hr'))
+                                    {{-- Edit --}}
+                                    <a
+                                        href="{{ route('vacancies.edit', $vacancy) }}"
+                                        class="text-blue-600 hover:underline text-sm"
+                                    >
+                                        Edit
+                                    </a>
+                                @endif
 
                                 {{-- Delete --}}
                                 <form

@@ -159,6 +159,16 @@ class VacancyController extends Controller
             ->with('success', 'Vacancy updated successfully.');
     }
 
+    /**
+     * View vacancy
+     */
+    public function view(Vacancy $vacancy)
+    {
+        $this->authorize('view', $vacancy);
+
+        return view('vacancies.view', compact('vacancy'));
+    }
+
     public function destroy(Vacancy $vacancy)
     {
         $this->authorize('delete', $vacancy);

@@ -66,6 +66,10 @@ Route::middleware('auth')->group(function () {
             ->name('vacancies.update');
     });
 
+    Route::get('/vacancies/{vacancy}', [VacancyController::class, 'view'])
+        ->middleware('can:view,' . Vacancy::class)
+        ->name('vacancies.view');
+
     Route::delete('/vacancies/{vacancy}', [VacancyController::class, 'destroy'])
         ->middleware('can:delete,vacancy')
         ->name('vacancies.destroy');

@@ -34,10 +34,11 @@ class VacancyPolicy
     /**
      * View single vacancy (same rules)
      */
-    public function view(User $user, Vacancy $vacancy): bool
+    public function view(User $user): bool
     {
-        return $this->viewAny($user)
-            && $vacancy->company_id === $user->company_id;
+        return $user->hasRoleInCompany('admin')
+            || $user->hasRoleInCompany('hr')
+            || $user->hasRoleInCompany('company-admin');
     }
 
     /**
