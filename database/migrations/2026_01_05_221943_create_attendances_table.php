@@ -27,6 +27,9 @@ return new class extends Migration
             $table->timestamp('check_in_at')->nullable();
             $table->timestamp('check_out_at')->nullable();
 
+            $table->boolean('is_absent')->default(false);
+            $table->string('absence_reason')->nullable();
+
             $table->timestamps();
 
             $table->unique(['user_id', 'date']);

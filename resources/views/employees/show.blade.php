@@ -85,6 +85,48 @@
             </a>
         </div>
 
+        {{-- Absence action --}}
+        @if(
+            auth()->user()->hasRoleInCompany('hr')
+            && ! $todayAttendance
+        )
+            <form
+                method="POST"
+                action="{{ route('attendance.absence', [$company, $employee]) }}"
+                class="mb-4 mt-4 space-y-3"
+            >
+                @csrf
+
+                {{-- Reason --}}
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">
+                        Absence reason (optional)
+                    </label>
+
+                    <textarea
+                        name="reason"
+                        rows="3"
+                        class="w-full border rounded px-3 py-2 text-sm"
+                        placeholder="Sick, vacation, personal..."
+                    >{{ old('reason') }}</textarea>
+
+                    @error('reason')
+                    <div class="text-red-600 text-sm mt-1">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
+                <button
+                    type="submit"
+                    class="bg-yellow-500 text-white px-4 py-2 rounded"
+                >
+                    Mark as Absent (Today)
+                </button>
+            </form>
+        @endif
+
+
         {{-- Subordinates --}}
         @if($subordinates->count())
             <div class="mt-8">
@@ -148,6 +190,7 @@
                         <th class="p-3 text-left text-sm text-gray-600">Check In</th>
                         <th class="p-3 text-left text-sm text-gray-600">Check Out</th>
                         <th class="p-3 text-left text-sm text-gray-600">Status</th>
+                        <th class="p-3 text-left text-sm text-gray-600">Reason</th>
                     </tr>
                     </thead>
 
@@ -167,18 +210,32 @@
                             </td>
 
                             <td class="p-3">
-                                @if($attendance->check_in_at && $attendance->check_out_at)
-                                    <span class="text-green-600 text-sm">Completed</span>
+                                @if($attendance->is_absent)
+                                    <span class="text-red-600 text-sm font-medium">
+                                Absent
+                            </span>
+                                @elseif($attendance->check_in_at && $attendance->check_out_at)
+                                    <span class="text-green-600 text-sm">
+                                Completed
+                            </span>
                                 @elseif($attendance->check_in_at)
-                                    <span class="text-yellow-600 text-sm">Checked in</span>
+                                    <span class="text-yellow-600 text-sm">
+                                Checked in
+                            </span>
                                 @else
-                                    <span class="text-gray-500 text-sm">Absent</span>
+                                    <span class="text-gray-400 text-sm">
+                                —
+                            </span>
                                 @endif
+                            </td>
+
+                            <td class="p-3 text-sm text-gray-600">
+                                {{ $attendance->absence_reason ?? '—' }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="p-4 text-center text-gray-500">
+                            <td colspan="5" class="p-4 text-center text-gray-500">
                                 No attendance records
                             </td>
                         </tr>

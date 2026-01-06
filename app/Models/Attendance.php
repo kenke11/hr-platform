@@ -15,6 +15,8 @@ class Attendance extends Model
         'date',
         'check_in_at',
         'check_out_at',
+        'is_absent',
+        'absence_reason',
     ];
 
     protected $casts = [

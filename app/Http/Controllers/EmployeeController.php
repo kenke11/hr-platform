@@ -101,6 +101,11 @@ class EmployeeController extends Controller
             'manager:id,name',
         ]);
 
+        $todayAttendance = $user->attendances()
+            ->where('company_id', $company->id)
+            ->whereDate('date', now())
+            ->first();
+
         $attendances = $user->attendances()
             ->where('company_id', $company->id)
             ->orderByDesc('date')
@@ -117,6 +122,7 @@ class EmployeeController extends Controller
         return view('employees.show', [
             'company'      => $company,
             'employee'     => $employee,
+            'todayAttendance' => $todayAttendance,
             'attendances'  => $attendances,
             'subordinates' => $subordinates,
         ]);

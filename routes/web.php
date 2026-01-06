@@ -179,4 +179,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])
         ->name('attendance.checkout');
+
+    Route::post(
+        '/companies/{company:slug}/employees/{user}/absence',
+        [AttendanceController::class, 'markAbsent']
+    )->name('attendance.absence');
 });

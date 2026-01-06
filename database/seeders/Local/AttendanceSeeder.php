@@ -20,32 +20,76 @@ class AttendanceSeeder extends Seeder
 
                 // last 5 working days
                 for ($i = 0; $i < 5; $i++) {
-                    $date = Carbon::now()->subDays($i)->toDateString();
+                    $date = Carbon::now()->subDays($i);
 
-                    // skip weekends (optional)
-                    if (Carbon::parse($date)->isWeekend()) {
+                    // skip weekends
+                    if ($date->isWeekend()) {
                         continue;
                     }
 
-                    $checkIn = Carbon::parse($date)->setTime(
+                    // random scenario
+                    $rand = rand(1, 100);
+
+                    // 🟥 ABSENT (10%)
+                    if ($rand <= 10) {
+                        Attendance::updateOrCreate(
+                            [
+                                'user_id' => $employee->id,
+                                'date'    => $date->toDateString(),
+                            ],
+                            [
+                                'company_id'      => $company->id,
+                                'is_absent'       => true,
+                                'absence_reason' => collect(['sick', 'vacation', 'personal'])->random(),
+                                'check_in_at'     => null,
+                                'check_out_at'    => null,
+                            ]
+                        );
+
+                        continue;
+                    }
+
+                    // 🟨 CHECK-IN only (20%)
+                    if ($rand <= 30) {
+                        $checkIn = $date->copy()->setTime(
+                            rand(8, 10),
+                            rand(0, 59)
+                        );
+
+                        Attendance::updateOrCreate(
+                            [
+                                'user_id' => $employee->id,
+                                'date'    => $date->toDateString(),
+                            ],
+                            [
+                                'company_id'   => $company->id,
+                                'is_absent'    => false,
+                                'check_in_at'  => $checkIn,
+                                'check_out_at' => null,
+                            ]
+                        );
+
+                        continue;
+                    }
+
+                    // 🟩 FULL DAY (70%)
+                    $checkIn = $date->copy()->setTime(
                         rand(8, 10),
                         rand(0, 59)
                     );
 
-                    // 70% chance of checkout
-                    $hasCheckout = rand(1, 100) <= 70;
-
-                    $checkOut = $hasCheckout
-                        ? (clone $checkIn)->addHours(rand(7, 9))->addMinutes(rand(0, 30))
-                        : null;
+                    $checkOut = (clone $checkIn)
+                        ->addHours(rand(7, 9))
+                        ->addMinutes(rand(0, 30));
 
                     Attendance::updateOrCreate(
                         [
                             'user_id' => $employee->id,
-                            'date'    => $date,
+                            'date'    => $date->toDateString(),
                         ],
                         [
                             'company_id'   => $company->id,
+                            'is_absent'    => false,
                             'check_in_at'  => $checkIn,
                             'check_out_at' => $checkOut,
                         ]
