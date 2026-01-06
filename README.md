@@ -100,7 +100,7 @@ routes/
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:kenke11/hr-platform.git
 cd hr-platform
 ```
 
