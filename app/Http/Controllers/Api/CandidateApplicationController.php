@@ -16,37 +16,103 @@ class CandidateApplicationController extends Controller
 {
     #[OA\Post(
         path: "/api/v1/public/vacancies/{vacancy}/apply",
-        summary: "Apply for vacancy",
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\MediaType(
-                mediaType: "multipart/form-data",
-                schema: new OA\Schema(
-                    required: ["full_name", "email", "cv"],
-                    properties: [
-                        new OA\Property(property: "full_name", type: "string"),
-                        new OA\Property(property: "email", type: "string", format: "email"),
-                        new OA\Property(property: "phone", type: "string", nullable: true),
-                        new OA\Property(property: "cv", type: "string", format: "binary"),
-                        new OA\Property(property: "linkedin_url", type: "string", nullable: true),
-                        new OA\Property(property: "github_url", type: "string", nullable: true),
-                        new OA\Property(property: "portfolio_url", type: "string", nullable: true),
-                    ]
-                )
-            )
-        ),
+        summary: "Apply for a vacancy",
+        description: "Submit a candidate application with CV upload",
         tags: ["Candidates"],
+
         parameters: [
             new OA\Parameter(
                 name: "vacancy",
+                description: "Vacancy ID",
                 in: "path",
                 required: true,
-                schema: new OA\Schema(type: "integer")
+                schema: new OA\Schema(type: "integer", example: 1)
             )
         ],
+
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: [
+                "multipart/form-data" => new OA\MediaType(
+                    mediaType: "multipart/form-data",
+                    schema: new OA\Schema(
+                        required: ["full_name", "email", "cv"],
+                        properties: [
+                            new OA\Property(
+                                property: "full_name",
+                                type: "string",
+                                example: "John Doe"
+                            ),
+                            new OA\Property(
+                                property: "email",
+                                type: "string",
+                                format: "email",
+                                example: "john@example.com"
+                            ),
+                            new OA\Property(
+                                property: "phone",
+                                type: "string",
+                                nullable: true,
+                                example: "+1 555 123 4567"
+                            ),
+                            new OA\Property(
+                                property: "cv",
+                                type: "string",
+                                format: "binary"
+                            ),
+                            new OA\Property(
+                                property: "linkedin_url",
+                                type: "string",
+                                nullable: true,
+                                example: "https://linkedin.com/in/johndoe"
+                            ),
+                            new OA\Property(
+                                property: "github_url",
+                                type: "string",
+                                nullable: true,
+                                example: "https://github.com/johndoe"
+                            ),
+                            new OA\Property(
+                                property: "portfolio_url",
+                                type: "string",
+                                nullable: true,
+                                example: "https://johndoe.dev"
+                            ),
+                            new OA\Property(
+                                property: "cover_letter",
+                                type: "string",
+                                nullable: true,
+                                example: "I am very interested in this position."
+                            ),
+                        ]
+                    )
+                )
+            ]
+        ),
+
         responses: [
-            new OA\Response(response: 201, description: "Application created"),
-            new OA\Response(response: 422, description: "Validation error"),
+            new OA\Response(
+                response: 201,
+                description: "Application created",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string"),
+                        new OA\Property(property: "id", type: "integer"),
+                    ],
+                    example: [
+                        "message" => "Application submitted successfully",
+                        "id" => 10
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Vacancy not found or not published"
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error"
+            ),
         ]
     )]
     public function store(

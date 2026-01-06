@@ -10,15 +10,18 @@
                 "tags": [
                     "Candidates"
                 ],
-                "summary": "Apply for vacancy",
+                "summary": "Apply for a vacancy",
+                "description": "Submit a candidate application with CV upload",
                 "operationId": "76634896bd145585504ea8d66060b2d5",
                 "parameters": [
                     {
                         "name": "vacancy",
                         "in": "path",
+                        "description": "Vacancy ID",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
@@ -34,14 +37,17 @@
                                 ],
                                 "properties": {
                                     "full_name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "John Doe"
                                     },
                                     "email": {
                                         "type": "string",
-                                        "format": "email"
+                                        "format": "email",
+                                        "example": "john@example.com"
                                     },
                                     "phone": {
                                         "type": "string",
+                                        "example": "+1 555 123 4567",
                                         "nullable": true
                                     },
                                     "cv": {
@@ -50,14 +56,22 @@
                                     },
                                     "linkedin_url": {
                                         "type": "string",
+                                        "example": "https://linkedin.com/in/johndoe",
                                         "nullable": true
                                     },
                                     "github_url": {
                                         "type": "string",
+                                        "example": "https://github.com/johndoe",
                                         "nullable": true
                                     },
                                     "portfolio_url": {
                                         "type": "string",
+                                        "example": "https://johndoe.dev",
+                                        "nullable": true
+                                    },
+                                    "cover_letter": {
+                                        "type": "string",
+                                        "example": "I am very interested in this position.",
                                         "nullable": true
                                     }
                                 },
@@ -68,7 +82,29 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Application created"
+                        "description": "Application created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Application submitted successfully",
+                                    "id": 10
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Vacancy not found or not published"
                     },
                     "422": {
                         "description": "Validation error"

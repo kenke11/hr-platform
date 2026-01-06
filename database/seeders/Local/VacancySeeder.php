@@ -11,6 +11,12 @@ class VacancySeeder extends Seeder
     public function run(): void
     {
         Company::all()->each(function (Company $company) {
+            Vacancy::factory(2)
+                ->withExpiration()
+                ->published()
+                ->create([
+                'company_id' => $company->id,
+            ]);
 
             // Draft vacancies
             Vacancy::factory(2)->create([
