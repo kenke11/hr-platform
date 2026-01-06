@@ -208,6 +208,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Can approve or reject vacation requests
+     */
+    public function canApproveOrRejectVacation(?Company $company = null): bool
+    {
+        // system-level HR
+        if ($this->hasRoleInCompany('hr')) {
+            return true;
+        }
+
+        // company admin — only inside own company
+        return $company
+            && $this->hasRoleInCompany('company-admin', $company->id)
+            && $this->company_id === $company->id;
+    }
+
+    /**
      * System-level access
      */
     public function canAccessAllCompanies(): bool

@@ -63,6 +63,18 @@
                     Employees
                 </a>
 
+                {{-- Vacations --}}
+                <a
+                    href="{{ route('companies.view', $company) }}?tab=vacations"
+                    @class([
+                        'pb-2 font-medium',
+                        'border-b-2 border-black' => $tab === 'vacations',
+                        'text-gray-500' => $tab !== 'vacations',
+                    ])
+                >
+                    Vacation Requests
+                </a>
+
             </nav>
         </div>
 
@@ -77,6 +89,10 @@
 
         @if($tab === 'employees')
             @include('companies.partials.employees')
+        @endif
+
+        @if($tab === 'vacations')
+            @include('companies.partials.vacations')
         @endif
     </div>
 @endsection

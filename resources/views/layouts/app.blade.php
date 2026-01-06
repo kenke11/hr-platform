@@ -31,6 +31,12 @@
                 Profile
             </a>
 
+            @if(auth()->user()->isCompanyUser())
+            <a href="{{ route('vacations.create') }}" class="block">
+                Vacation
+            </a>
+            @endif
+
             <a href="{{ route('dashboard') }}" class="block">
                 Dashboard
             </a>

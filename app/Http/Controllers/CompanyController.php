@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Position;
 use App\Models\User;
 use App\Models\Vacancy;
+use App\Models\Vacation;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -119,6 +120,34 @@ class CompanyController extends Controller
                 'company' => $company,
                 'tab' => 'positions',
                 'positions' => $positions,
+            ]);
+        }
+
+        if ($tab === 'vacations') {
+            $vacations = Vacation::query()
+                ->where('company_id', $company->id)
+                ->select([
+                    'id',
+                    'user_id',
+                    'start_date',
+                    'end_date',
+                    'type',
+                    'status',
+                    'reason',
+                    'approved_by',
+                    'approved_at',
+                    'company_id',
+                    'created_at',
+                ])
+                ->with(['user', 'approver', 'company'])
+                ->latest()
+                ->paginate(10)
+                ->withQueryString();
+
+            return view('companies.view', [
+                'company' => $company,
+                'tab' => 'vacations',
+                'vacations' => $vacations,
             ]);
         }
 

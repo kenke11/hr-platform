@@ -3,7 +3,7 @@
 @section('title', 'My Profile')
 
 @section('content')
-    <div class="max-w-3xl">
+    <div class="max-w-full">
 
         {{-- Header --}}
         <div class="mb-6">
@@ -105,6 +105,7 @@
                             <th class="p-3 text-left text-sm">Check In</th>
                             <th class="p-3 text-left text-sm">Check Out</th>
                             <th class="p-3 text-left text-sm">Status</th>
+                            <th class="p-3 text-left text-sm">Reson</th>
                         </tr>
                         </thead>
 
@@ -128,6 +129,9 @@
                                     @else
                                         <span class="text-gray-500 text-sm">Absent</span>
                                     @endif
+                                </td>
+                                <td>
+                                    {{$attendance->absence_reason ?? '—'}}
                                 </td>
                             </tr>
                         @empty

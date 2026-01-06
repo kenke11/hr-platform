@@ -8,9 +8,11 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VacancyController;
+use App\Http\Controllers\VacationController;
 use App\Models\Company;
 use App\Models\User;
 use App\Models\Vacancy;
+use App\Models\Vacation;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -184,4 +186,20 @@ Route::middleware('auth')->group(function () {
         '/companies/{company:slug}/employees/{user}/absence',
         [AttendanceController::class, 'markAbsent']
     )->name('attendance.absence');
+
+    Route::get('/vacations/create', [VacationController::class, 'create'])
+        ->middleware('can:create,' . Vacation::class)
+        ->name('vacations.create');
+
+    Route::post('/vacations', [VacationController::class, 'store'])
+        ->middleware('can:create,' . Vacation::class)
+        ->name('vacations.store');
+
+    Route::post('/vacations/{vacation}/approve', [VacationController::class, 'approve'])
+        ->middleware('can:approve,vacation')
+        ->name('vacations.approve');
+
+    Route::post('/vacations/{vacation}/reject', [VacationController::class, 'reject'])
+        ->middleware('can:reject,vacation')
+        ->name('vacations.reject');
 });
