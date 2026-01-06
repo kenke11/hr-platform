@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CandidateApplicationController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
@@ -202,4 +203,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/vacations/{vacation}/reject', [VacationController::class, 'reject'])
         ->middleware('can:reject,vacation')
         ->name('vacations.reject');
+
+    Route::post(
+        '/candidates/{candidate}/{status}',
+        [CandidateApplicationController::class, 'updateStatus']
+    )->name('candidates.status');
+
 });

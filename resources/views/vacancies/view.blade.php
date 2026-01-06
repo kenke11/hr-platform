@@ -65,5 +65,7 @@
                 </a>
             @endif
         </div>
+
+        <x-candidates-list :candidates="$candidates" />
     </div>
 @endsection

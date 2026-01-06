@@ -7,6 +7,7 @@ use App\Http\Requests\CreateVacancyRequest;
 use App\Http\Requests\IndexVacancyRequest;
 use App\Http\Requests\StoreVacancyRequest;
 use App\Http\Requests\UpdateVacancyRequest;
+use App\Models\CandidateApplication;
 use App\Models\Company;
 use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -166,7 +167,11 @@ class VacancyController extends Controller
     {
         $this->authorize('view', $vacancy);
 
-        return view('vacancies.view', compact('vacancy'));
+        $candidates = CandidateApplication::where('vacancy_id', $vacancy->id)
+            ->latest()
+            ->paginate(10);
+
+        return view('vacancies.view', compact('vacancy', 'candidates'));
     }
 
     public function destroy(Vacancy $vacancy)
