@@ -5,12 +5,25 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
+#[OA\Tag(
+    name: "Public Vacancies",
+    description: "Public vacancies endpoints"
+)]
 class PublicVacancyController extends Controller
 {
-    /**
-     * GET /public/vacancies
-     */
+    #[OA\Get(
+        path: "/api/v1/public/vacancies",
+        summary: "List public vacancies",
+        tags: ["Public Vacancies"],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Vacancies list"
+            )
+        ]
+    )]
     public function index(Request $request)
     {
         $vacancies = Vacancy::query()
@@ -31,9 +44,23 @@ class PublicVacancyController extends Controller
         return response()->json($vacancies);
     }
 
-    /**
-     * GET /public/vacancies/{id}
-     */
+    #[OA\Get(
+        path: "/api/v1/public/vacancies/{vacancy}",
+        summary: "Get vacancy details",
+        tags: ["Public Vacancies"],
+        parameters: [
+            new OA\Parameter(
+                name: "vacancy",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Vacancy details"),
+            new OA\Response(response: 404, description: "Not found")
+        ]
+    )]
     public function show(Vacancy $vacancy)
     {
         abort_unless($vacancy->isPublished(), 404);

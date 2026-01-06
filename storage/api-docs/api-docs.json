@@ -1,0 +1,131 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "HR Platform API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/public/vacancies/{vacancy}/apply": {
+            "post": {
+                "tags": [
+                    "Candidates"
+                ],
+                "summary": "Apply for vacancy",
+                "operationId": "76634896bd145585504ea8d66060b2d5",
+                "parameters": [
+                    {
+                        "name": "vacancy",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "full_name",
+                                    "email",
+                                    "cv"
+                                ],
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "cv": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "linkedin_url": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "github_url": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "portfolio_url": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Application created"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/v1/public/vacancies": {
+            "get": {
+                "tags": [
+                    "Public Vacancies"
+                ],
+                "summary": "List public vacancies",
+                "operationId": "594be5c0770149456ea05b11447cd641",
+                "responses": {
+                    "200": {
+                        "description": "Vacancies list"
+                    }
+                }
+            }
+        },
+        "/api/v1/public/vacancies/{vacancy}": {
+            "get": {
+                "tags": [
+                    "Public Vacancies"
+                ],
+                "summary": "Get vacancy details",
+                "operationId": "9840ef98884cc2da539a5017e00c84ab",
+                "parameters": [
+                    {
+                        "name": "vacancy",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vacancy details"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Candidates",
+            "description": "Candidate applications"
+        },
+        {
+            "name": "Public Vacancies",
+            "description": "Public vacancies endpoints"
+        }
+    ]
+}
